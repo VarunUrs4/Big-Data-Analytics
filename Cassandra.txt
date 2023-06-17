@@ -1,0 +1,168 @@
+1. Perform the following DB operations using Cassandra.
+
+1. Create a keyspace by name Employee
+cqlsh> create keyspace Employee with replication = {
+... 'class' : 'SimpleStrategy',
+... 'replication_factor' : 1
+... };
+cqlsh> use Employee;
+
+2. Create a column family by name
+Employee-Info with attributes
+Emp_Id Primary Key, Emp_Name,
+Designation, Date_of_Joining, Salary, Dept_Name
+cqlsh:employee> create table Employee_info(
+... Emp_id int,
+... Emp_name text,
+... Designation text,
+... DOJ timestamp,
+... salary double,
+... Dept_name text,
+... primary key(Emp_id,salary)
+... );
+
+5
+
+3. Insert the values into the table in batch
+cqlsh:employee> begin batch
+... insert into
+Employee_info(Emp_id,Emp_name,Designation,DOJ,salary,Dept_name) values
+(111,'John','Assistant professor','2022-05-11',75000,'CSE')
+... insert into
+Employee_info(Emp_id,Emp_name,Designation,DOJ,salary,Dept_name) values
+(121,'Amber','Assistant professor','2022-05-11',85000,'CSE')
+... insert into
+Employee_info(Emp_id,Emp_name,Designation,DOJ,salary,Dept_name) values
+(131,'Mary','Associate professor','2022-05-11',95000,'ECE')
+... insert into
+Employee_info(Emp_id,Emp_name,Designation,DOJ,salary,Dept_name) values
+(141,'Jane','Associate professor','2022-05-11',105000,'ISE')
+... insert into
+Employee_info(Emp_id,Emp_name,Designation,DOJ,salary,Dept_name) values
+(151,'Yelena','Associate professor','2022-05-11',95000,'ISE')
+... apply batch;
+cqlsh:employee> select * from Employee_info;
+
+
+4. Update Employee name and Department of Emp-Id 121
+cqlsh:employee> update Employee_info set Emp_name = 'Josh', Dept_name =
+'ECE' where Emp_id = 121 and salary = 85000;
+cqlsh:employee> select * from Employee_info;
+
+
+5. Sort the details of Employee records based on salary
+cqlsh:employee> select * from Employee_info where Emp_id
+in(111,121,131,141,151) order by salary desc;
+
+
+6. Alter the schema of the table Employee_Info to add a column Projects which
+stores a set of Projects done by the corresponding Employee.
+cqlsh:employee> update Employee_info set project = project+{'AI','Data
+warehouse'} where Emp_id = 111 and salary = 75000;
+cqlsh:employee> update Employee_info set project = project+{'IOT','Data
+warehouse'} where Emp_id = 121 and salary = 85000;
+
+
+
+cqlsh:employee> update Employee_info set project = project+{'IOT','AI'} where
+Emp_id = 131 and salary = 95000;
+cqlsh:employee> update Employee_info set project = project+{'IOT','machine
+learning'} where Emp_id = 141 and salary = 95000;
+cqlsh:employee> update Employee_info set project = project+{'IOT','data science'}
+where Emp_id = 141 and salary = 105000;
+cqlsh:employee> select * from Employee_info;
+
+
+7. Update the altered table to add project names.
+cqlsh:employee> update Employee_info set project = project+{'IOT','AI'} where
+Emp_id = 151 and salary = 95000;
+cqlsh:employee> select * from Employee_info;
+
+
+8.Create a TTL of 15 seconds to display the values of Employees.
+cqlsh:employee> insert into
+Employee_info(Emp_id,Emp_name,Designation,DOJ,salary,Dept_name) values
+(161,'Ryan','Associate professor','2022-05-11',95000,'ISE') using ttl 60;
+cqlsh:employee> select ttl(Emp_name) from Employee_info where Emp_id = 161
+and salary = 95000;
+
+
+
+LAB 2
+2. Perform the following DB operations using Cassandra.
+1.Create a keyspace by name Library
+cqlsh> create keyspace library with replication = {
+... 'class' : 'SimpleStrategy',
+... 'replication_factor' : 1
+... };
+cqlsh> use library
+... ;
+2. Create a column family by name Library-Info with attributes
+Stud_Id Primary Key, Counter_value of type Counter,
+Stud_Name, Book-Name, Book-Id, Date_of_issue
+cqlsh:library> create table library_info (
+... stud_id int,
+... stud_name text,
+... book_id int,
+... book_name text,
+... date_of_issue timestamp,
+... counter_value counter,
+... primary key ((stud_id,book_id),stud_name,book_name,date_of_issue)
+... );
+
+12
+
+3. Insert the values into the table in batch
+cqlsh:library> update library_info
+... set counter_value = counter_value+1
+... where stud_id = 111 and stud_name = 'Raj' and book_id = 100 and
+book_name = 'ADA' and date_of_issue = '2022-04-05';
+cqlsh:library> update library_info
+... set counter_value = counter_value+1
+... where stud_id = 112 and stud_name = 'Ram' and book_id = 200 and
+book_name = 'DSA' and date_of_issue = '2022-04-06';
+cqlsh:library> update library_info
+... set counter_value = counter_value+1
+... where stud_id = 113 and stud_name = 'sohan' and book_id = 300 and
+book_name = 'JAVA' and date_of_issue = '2022-04-07';
+cqlsh:library> update library_info
+... set counter_value = counter_value+1
+... where stud_id = 114 and stud_name = 'rohan' and book_id = 400 and
+book_name = 'UNIX' and date_of_issue = '2022-04-07';
+
+
+
+4. Display the details of the table created and increase the value of the counter
+cqlsh:library> select * from library_info;
+
+
+cqlsh:library> update library_info
+... set counter_value = counter_value+1
+... where stud_id = 114 and stud_name = 'rohan' and book_id = 400 and
+book_name = 'UNIX' and date_of_issue = '2022-04-07';
+
+
+
+5. Write a query to show that a student with id 114 has taken a book “UNIX” 2
+times.
+cqlsh:library> select stud_id from library_info where book_name = 'UNIX' and
+counter_value = 2 allow filtering;
+
+
+
+6. Export the created column to a csv file
+cqlsh:library> copy
+library_info(stud_id,stud_name,book_id,book_name,date_of_issue,counter_value
+) to 'd:\library_info.csv';
+
+
+
+7. Import a given csv dataset from local file system into Cassandra column family
+cqlsh:library> truncate library_info;
+cqlsh:library> select * from library_info;
+cqlsh:library> copy library_info(stud_id,book_id,stud_name,book_name,date_of_issue,counter_value
+) from 'd:\library_info.csv' with header = true;
+
+cqlsh:library> select * from library_info;
+
+

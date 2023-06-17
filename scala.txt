@@ -1,0 +1,255 @@
+1. Program to run wordcount on scala shell
+
+val data=sc.textFile("sparkdata.txt")
+data.collect;
+val splitdata = data.flatMap(line => line.split(" "));
+splitdata.collect;
+val mapdata = splitdata.map(word => (word,1));
+mapdata.collect;
+val reducedata = mapdata.reduceByKey(_+_);
+reducedata.collect;
+
+
+   2. Using RDD and FlaMap count how many times each word appears in a file and write out a list of words whose count is strictly greater than 4 using Spark.
+
+ val textFile = sc.textFile("/home/bhoom/Desktop/wc.txt")
+val counts = textFile.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
+import scala.collection.immutable.ListMap
+val sorted=ListMap(counts.collect.sortWith(_._2 > _._2):_*)// sort in descending order based 
+on values
+println(sorted)
+for((k,v)<-sorted){
+if(v>4){
+print(k+",")
+print(v)
+println()
+}
+}
+
+
+
+1) Scala program to print your name.
+/*Scala program to print your name*/
+    object ExPrintName {
+       def main(args: Array[String]) {
+           println("My name is Mike!")
+       }
+    }
+
+
+2) Scala program to find largest number among two numbers.
+/**Scala  Program to find largest number among two numbers.*/
+
+    object ExFindLargest {
+       def main(args: Array[String]) {
+          var number1=20;
+          var number2=30;
+          var x = 10;
+
+          if( number1>number2){
+             println("Largest number is:" + number1);
+          }
+          else{
+              println("Largest number is:" + number2);
+          }
+       }
+    }
+
+
+3) Scala program to find a number is positive, negative or positive.
+/**Scala program to find a number is positive, negative or positive.*/
+
+    object ExCheckNumber {
+       def main(args: Array[String]) {
+        
+            /**declare a variable*/
+            var number= (-100);
+       
+           if(number==0){
+               println("number is zero");
+           }
+           else if(number>0){
+               println("number is positive");
+           }
+           else{
+               println("number is negative");
+           }
+       }
+    }
+
+
+4) Scala program to declare string variable and print the string.
+object ExampleString {
+   def main(args: Array[String]) {
+        
+        //declare and assign string variable "text"
+        val text : String = "You are reading SCALA programming language.";
+        
+        //print the value of string variable "text"
+        
+        println("Value of text is: " + text);
+        
+   }
+}
+
+
+
+
+5) Scala program to demonstrate example of multiple variables declarations and assignments.
+In this example we will learn, how we can declare and assign multiple variables together?
+
+/*Scala program to demonstrate example of multiple 
+variables declarations and assignments.*/
+
+object ExampleVarDecAndAssin {
+   def main(args: Array[String]) {
+      
+      var (name: String, age: Int) = Pair("Mike",21);
+
+      //print values
+      println("Name:   "+name);
+      println("Age:    "+age);
+      
+      //declaration without specifying data type
+      var (address,mobile)=Pair("New Delhi, India",1234567890);
+      
+      //print values
+      println("Address:   "+address);
+      println("Mobile:    "+mobile);      
+            
+   }
+}
+
+
+
+6) Scala program to print numbers from 1 to 100 using for loop.
+In this example we will learn, how we can print number from 1 to 100 in Scala using to keyword?
+
+/*Scala program to print numbers from 1 to 100 
+using for loop.*/
+
+object ExampleForLoop1 {
+   def main(args: Array[String]) {
+      var counter: Int=0;
+      
+      for(counter <- 1 to 100)
+        print(counter + " ");
+    
+      // to print new line
+      println();
+   }
+}
+
+
+
+
+7) Scala program to print numbers from 1 to 100 using for loop with until to determine loop range.
+In this example we will learn, how we can print number from 1 to 100 in Scala using until keyword?
+
+/*Scala program to print numbers from 1 to 100 
+using for loop with until to determine loop range.*/
+
+object ExampleForLoop2 {
+   def main(args: Array[String]) {
+      var counter: Int=0;
+      
+      for(counter <- 1 until 101)
+        print(counter + " ");
+    
+      // to print new line
+      println();
+   }
+}
+
+
+
+8) Scala program to demonstrate example of collection list and for loop.
+In this program we will learn, how we can declare integers collection and print using for loop?
+
+/*Scala program to demonstrate example of 
+collection list and for loop.*/
+
+object ExampleForAndCollection {
+   def main(args: Array[String]) {
+      //declare an integer
+      var N: Int=0;
+      
+      //declare integer list
+      var numbers = List(100,200,300,400);
+      
+      //to print all numbers using for loop
+      for(N<-numbers){
+          println(N);
+      }
+      
+   }
+}
+
+
+
+
+9) Scala program to create a user define function to return largest number among two numbers.
+In this example we will learn, how to create a user define function in Scala?
+
+/*Scala program to create a user define function 
+to return largest number among two numbers.*/
+
+object ExampleUDFToGetLargestNumber {
+    //function definition
+    def getLargestNumber(x: Int, y: Int) : Int ={
+        var largestNumber: Int=0;
+        if(x>y)
+            largestNumber=x;
+        else
+            largestNumber=y;
+        
+        return largestNumber;
+    }
+    
+    def main(args: Array[String]) {
+        var a: Int=10;
+        var b: Int=20;
+        
+        //function calling
+        println("Largest number from "+ a+" and "+ b +" is: "+ getLargestNumber(a,b));
+        
+    }
+}
+
+
+
+
+10) Scala program of array - Declare, print and calculate sum of all elements.
+/*Scala program of array - Declare, print 
+and calculate sum of all elements.*/
+
+object ExampleArray1 {
+    
+   def main(args: Array[String]) {
+       
+      var numbers = Array(10,20,30,40,50);
+      var N:Int=0;
+      
+      //print all array elements
+      println("All array elements: ");
+      for ( N <- numbers ) {
+         println(N);
+      }
+      //calculating SUM of all elements
+      var sum: Int=0;
+      for ( N <- numbers ) {
+         sum+=N;
+      }      
+      println("Sum of all array elements: "+sum);
+
+   }
+}
+
+
+
+
+
+
+
+
+
